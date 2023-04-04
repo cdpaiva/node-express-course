@@ -4,11 +4,13 @@
 */
 
 import express from "express";
+import { consoleLog } from "./practice-middleware.js";
 
 const PORT = 3000;
 const app = express();
 
 app.use(express.static("./new-public"));
+app.use(consoleLog);
 
 app.get("/sample", (req, res) => {
   return res.send("This is working");
