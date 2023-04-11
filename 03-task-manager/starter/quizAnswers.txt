@@ -1,0 +1,9 @@
+1. Quickly explain how middleware is used in an Express application.
+    Middlewares are functions that process the incoming requests. This processing includes diffent actions: the middleware can change the request and response objects, can run code, and even send back the response to end that request. They form a pipeline, by receiving a request, processing it and sending it to the next middleware in the line with a call to next(). The order that they are executed depends on the order they are declared in our application.
+2. What does CRUD stand for?
+    CRUS stands for create, read, update, delete. These are common operations when we are working with a database. For example, in a DB of users, we'll probably want to register users (create), check our users (read), change some data about them (update) and remove users (delete).
+3. You are careful to store your sensitive information in a .env file.
+    a. How do you get your app to access the information in the .env file?
+        In Node, we use a dependecy called dotenv, which reads the information from the .env file and makes it available to us when we call its .config() method. After that we can reference the information in the .env in code, e.g. process.env.CLIENT_SECRET.
+    b. How do you protect the contents of the .env file so that it is not stored in your github repository?
+        The .env file should not be pushed into the github repository. To do that, we include it in the .gitignore file, which will block git from tracking it.
