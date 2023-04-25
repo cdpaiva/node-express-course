@@ -1,0 +1,18 @@
+1. In this lesson, you created a middleware function called asyncWrapper. Why?
+    The asyncWrapper function abstracts the error handling from the methods of the `tasks` controller.
+    Instead of adding a try catch clause to each of the methods, create a function that returns another function that will pass the error to other middleware, were the error will be caught.
+    We currently have two middleware functions, but only the `errorHandler` function is set to deal with errors (because it has a declaration with 4 parameters), so effectively `asyncWrapper` forwards the errors that can happen in the controller to the `errorHandler` middleware.
+    We could also set more than one middleware to deal with errors, if we had several different types of errors and wanted to isolate how they are treated.
+
+2. Suppose that you want to make sure that both a status code and and error message are send back to the user when they request the URL for a task that does not exist. Assume that you’ve created a CustomAPIError class and an error handler that references that class. Complete the code:
+
+    const { CustomAPIError } = require(./errors/customError.js);
+
+    const getTask = asyncWrapper(async (req, res, next) => {
+        const { id: taskID } = req.params;
+        const task = await Task.findOne({ _id: taskID });
+        if (!task) {
+            return next(new CustomAPIError("Task not found.", 404));
+        }
+        res.status(200).json({ task });
+    });
