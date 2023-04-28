@@ -26,28 +26,18 @@ const getAllProducts = async (req, res) => {
   if (name) {
     queryObject.name = { $regex: name, $options: "i" };
   }
-  //TODO: currently does not work with more than one filter for the same property
-  if (numericFilters) {
-    const operatorMap = {
-      ">": "$gt",
-      ">=": "$gte",
-      "<": "$lt",
-      "<=": "$lte",
-      "=": "$eq",
-    };
-    const regEx = /\b(<|>|>=|=|<=)\b/g;
-    let filters = numericFilters.replace(
-      regEx,
-      (match) => `-${operatorMap[match]}-`
-    );
-    const options = ["price", "rating"];
-    filters = filters.split(",").forEach((item) => {
-      const [field, operator, value] = item.split("-");
-      if (options.includes(field)) {
-        queryObject[field] = { [operator]: Number(value) };
-      }
-    });
-  }
+
+  const options = ["price", "rating"];
+  const parsedNumericFilters = numericFilters
+    .split(",")
+    .map((q) => parseQuery(q, options));
+
+  // supports more than one operator per field
+  parsedNumericFilters.forEach((p) => {
+    if (!p) return;
+    queryObject[p.field] ||= {};
+    queryObject[p.field][p.operator] = Number(p.value);
+  });
 
   let result = Product.find(queryObject);
 
@@ -74,5 +64,24 @@ const getAllProducts = async (req, res) => {
 
   res.status(200).json({ itemsFound: products.length, products });
 };
+
+// Parses que query into {operator,field,value}
+// returns null if the field is not in the options
+function parseQuery(query, options) {
+  const operatorMap = {
+    ">": "$gt",
+    ">=": "$gte",
+    "<": "$lt",
+    "<=": "$lte",
+    "=": "$eq",
+  };
+  const regEx = /(^\w+)(<|>|>=|=|<=)(\d+\.?\d?)/g;
+  const matches = [...query.matchAll(regEx)];
+  const [_, field, operator, value] = matches[0];
+  if (!options.includes(field)) {
+    return;
+  }
+  return { operator: operatorMap[operator], field, value };
+}
 
 module.exports = { getAllProductsStatic, getAllProducts };
