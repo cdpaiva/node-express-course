@@ -9,16 +9,19 @@ const auth = async (req, res, next) => {
   }
 
   const token = header.split(" ")[1];
-  const decoded = await decodeTokenAsync(token);
 
-  req.user = { name: decoded.username };
-
-  next();
+  try {
+    const decoded = await decodeTokenAsync(token);
+    req.user = { name: decoded.username };
+    next();
+  } catch (err) {
+    next(err);
+  }
 };
 
 const decodeTokenAsync = (token) => {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(token, "process.env.JWT_SECRET", (err, decoded) => {
       if (err) {
         return reject(err);
       }
