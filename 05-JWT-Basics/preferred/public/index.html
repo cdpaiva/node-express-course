@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-half is-offset-one-quarter">
+                    <h1 class="title has-text-centered">Login</h1>
+                    <form id="test">
+                        <div class="field">
+                            <label class="label" for="username">Username</label>
+                            <input class="input is-success" type="text" placeholder="Username" id="username" name="username">
+                            <p class="help is-danger" id="username-validation"></p>
+                        </div>
+                        
+                        <div class="field">
+                            <label class="label" for="password">Password</label>
+                            <input class="input is-link" type="password" placeholder="Password" id="password" name="password">
+                            <p class="help is-danger" id="password-validation"></p>
+                        </div>
+                        
+                        <div class="field is-grouped is-flex is-justify-content-center">
+                            <button class="button is-link mr-2" id="btnSubmit">Submit</button>
+                            <button class="button is-link is-light" id="btnCancel">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                
+            </div>
+            <div class="columns">
+                <div class="column is-half is-offset-one-quarter box is-primary is-invisible" id="notification">
+                    <p id="message"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="index.js"></script>
+</body>
+</html>
